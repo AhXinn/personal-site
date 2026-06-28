@@ -111,19 +111,7 @@ export default function PersonalityShowcase({ onBack }) {
           className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-zinc-500/40 hover:bg-zinc-500/10 transition-all duration-500 cursor-pointer backdrop-blur-sm"
         >
           <span className="text-base font-medium tracking-widest">返回</span>
-          <svg
-            className="w-5 h-5 transition-transform duration-500 group-hover:-translate-y-0.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 10l7-7m0 0l7 7m-7-7v18"
-            />
-          </svg>
+
         </button>
       </div>
     </section>
