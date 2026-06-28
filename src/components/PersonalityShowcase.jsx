@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+﻿import { useEffect, useRef } from 'react'
 
 /**
  * 个性展示界面
@@ -110,7 +110,7 @@ export default function PersonalityShowcase({ onBack }) {
           onClick={onBack}
           className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-zinc-500/40 hover:bg-zinc-500/10 transition-all duration-500 cursor-pointer backdrop-blur-sm"
         >
-          <img src="/poker.png" alt="返回" className="w-14 h-14 object-contain" />
+          <img src="/personal-site/poker.png" alt="返回" className="w-14 h-14 object-contain" />
 
         </button>
       </div>
