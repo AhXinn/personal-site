@@ -1,29 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * Hero 封面页 —— 黑白烟雾风格
- * Canvas 黑白烟雾粒子 + CSS 雾层
- */
 export default function Hero({ onEnter }) {
   const canvasRef = useRef(null)
   const [exiting, setExiting] = useState(false)
   const [visible, setVisible] = useState(true)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [loaded, setLoaded] = useState(false)
 
   const handleEnter = () => {
     setExiting(true)
-    // 等退出动画播完再隐藏 Hero
-    setTimeout(() => {
-      setVisible(false)
-      onEnter()
-    }, 900)
+    setTimeout(() => { setVisible(false); onEnter() }, 1000)
   }
 
-  // ===== 烟雾粒子 Canvas =====
+  // 鼠标视差
+  useEffect(() => {
+    const handleMouse = (e) => {
+      setMousePos({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      })
+    }
+    window.addEventListener('mousemove', handleMouse, { passive: true })
+    return () => window.removeEventListener('mousemove', handleMouse)
+  }, [])
+
+  // 黑白烟雾 Canvas
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let animationId
+    let id
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -32,147 +38,152 @@ export default function Hero({ onEnter }) {
     resize()
     window.addEventListener('resize', resize)
 
-    // 烟雾粒子：大量低透明度的大粒子模拟雾气飘动
-    const particles = Array.from({ length: 80 }, () => ({
+    const particles = Array.from({ length: 60 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.6) * 0.3, // 偏向上飘
-      size: Math.random() * 120 + 40,   // 大粒子
-      opacity: Math.random() * 0.06 + 0.015,
-      hue: Math.random() > 0.5 ? 220 : 240, // 冷灰蓝系
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.6) * 0.25,
+      size: Math.random() * 100 + 30,
+      opacity: Math.random() * 0.05 + 0.01,
+      hue: Math.random() > 0.5 ? 220 : 240,
     }))
 
-    // 额外的小亮点模拟烟雾中的微光
-    const sparks = Array.from({ length: 30 }, () => ({
+    const sparks = Array.from({ length: 20 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.7) * 0.2,
-      size: Math.random() * 1.5 + 0.3,
-      opacity: Math.random() * 0.4 + 0.1,
-      life: Math.random() * 300 + 100,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.7) * 0.15,
+      size: Math.random() * 1.2 + 0.2,
+      opacity: Math.random() * 0.35 + 0.08,
+      life: Math.random() * 250 + 80,
       age: 0,
     }))
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      // 绘制大烟雾粒子
       particles.forEach((p) => {
-        p.x += p.vx
-        p.y += p.vy
-
-        // 循环边界
+        p.x += p.vx; p.y += p.vy
         if (p.x < -100) p.x = canvas.width + 100
         if (p.x > canvas.width + 100) p.x = -100
         if (p.y < -150) p.y = canvas.height + 150
         if (p.y > canvas.height + 150) p.y = -150
-
-        // 径向渐变模拟烟雾软边
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size)
-        gradient.addColorStop(0, `hsla(${p.hue}, 5%, 70%, ${p.opacity})`)
-        gradient.addColorStop(0.5, `hsla(${p.hue}, 3%, 45%, ${p.opacity * 0.5})`)
-        gradient.addColorStop(1, `hsla(${p.hue}, 0%, 30%, 0)`)
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = gradient
-        ctx.fill()
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size)
+        g.addColorStop(0, `hsla(${p.hue}, 3%, 65%, ${p.opacity})`)
+        g.addColorStop(0.5, `hsla(${p.hue}, 2%, 40%, ${p.opacity * 0.4})`)
+        g.addColorStop(1, `hsla(${p.hue}, 0%, 25%, 0)`)
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill()
       })
-
-      // 绘制微光粒子
-      sparks.forEach((s, i) => {
-        s.x += s.vx
-        s.y += s.vy
-        s.age++
-
+      sparks.forEach((s) => {
+        s.x += s.vx; s.y += s.vy; s.age++
         if (s.age > s.life) {
-          // 重置粒子
-          s.x = Math.random() * canvas.width
-          s.y = canvas.height + 20
-          s.age = 0
-          s.life = Math.random() * 300 + 100
-          s.opacity = Math.random() * 0.4 + 0.1
+          s.x = Math.random() * canvas.width; s.y = canvas.height + 20
+          s.age = 0; s.life = Math.random() * 250 + 80; s.opacity = Math.random() * 0.35 + 0.08
         }
-
-        const fade = s.age < s.life * 0.2
-          ? s.age / (s.life * 0.2)
-          : 1 - (s.age - s.life * 0.2) / (s.life * 0.8)
-
-        ctx.beginPath()
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(200, 200, 210, ${s.opacity * Math.max(0, fade)})`
-        ctx.fill()
+        const fade = s.age < s.life * 0.2 ? s.age / (s.life * 0.2) : 1 - (s.age - s.life * 0.2) / (s.life * 0.8)
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(200, 200, 210, ${s.opacity * Math.max(0, fade)})`; ctx.fill()
       })
-
-      animationId = requestAnimationFrame(animate)
+      id = requestAnimationFrame(animate)
     }
     animate()
+    return () => { cancelAnimationFrame(id); window.removeEventListener('resize', resize) }
+  }, [])
 
-    return () => {
-      cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', resize)
-    }
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 100)
+    return () => clearTimeout(t)
   }, [])
 
   if (!visible) return null
 
   return (
     <section
-      className={`fixed inset-0 z-50 flex items-center justify-center px-6 overflow-hidden bg-[#060508] transition-all duration-900 ease-in-out ${
-        exiting ? 'opacity-0 scale-105 blur-sm' : 'opacity-100 scale-100 blur-0'
+      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#0a0a0a] transition-all duration-1000 ease-in-out ${
+        exiting ? 'opacity-0 scale-105 blur-sm' : 'opacity-100 scale-100'
       }`}
-      style={{ transitionDuration: '900ms' }}
+      style={{ transitionDuration: '1000ms' }}
     >
-      {/* Canvas 烟雾背景 */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+      <div className="vignette" />
+      <div className="film-grain" />
+
+      <div
+        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(200,200,200,0.03) 0%, transparent 70%)',
+          left: '50%', top: '45%',
+          transform: `translate(-50%, -50%) translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px)`,
+        }}
       />
 
-      {/* 中心光晕 */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-white/[0.03] blur-[150px] pointer-events-none" />
-
-      {/* 底部雾层 */}
-      <div className="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t from-zinc-800/10 via-zinc-700/5 to-transparent pointer-events-none" />
-
-      {/* 内容 */}
       <div
-        className={`relative text-center max-w-3xl z-10 transition-all duration-700 delay-100 ${
-          exiting ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'
+        className={`relative text-center z-10 px-6 transition-all duration-1000 delay-200 ${
+          exiting ? 'opacity-0 translate-y-10' : loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}
       >
+        <div
+          className="mx-auto mb-12 h-px w-16 transition-all duration-1000 delay-100"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(180,160,140,0.5), transparent)',
+            opacity: loaded ? 1 : 0,
+          }}
+        />
 
-
-        {/* 名字 */}
         <h1
-          className="text-6xl sm:text-7xl md:text-9xl tracking-tight mb-8 text-white animate-fade-in-up opacity-0 animate-delay-100" style={{ fontFamily: 'Soul Seashell', fontWeight: 400 }}
-          style={{ animationFillMode: 'forwards' }}
+          className="text-7xl sm:text-8xl md:text-[10rem] tracking-[0.02em] mb-6 text-white transition-all duration-1000 delay-300"
+          style={{
+            fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif",
+            fontWeight: 700,
+            letterSpacing: '0.03em',
+            lineHeight: 1,
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(8px)',
+            textShadow: '0 0 80px rgba(180,160,140,0.06)',
+          }}
         >
           AhXinn
         </h1>
 
-        {/* 引言 */}
         <p
-          className="text-zinc-400 text-lg md:text-xl mb-14 animate-fade-in-up opacity-0 animate-delay-300"
-          style={{ animationFillMode: 'forwards' }}
+          className="text-sm sm:text-base tracking-[0.4em] uppercase mb-16 text-zinc-500 transition-all duration-1000 delay-500"
+          style={{
+            fontFamily: "'Inter', system-ui, sans-serif",
+            fontWeight: 300,
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(6px)',
+          }}
         >
-          be myself.
+          Be Myself
         </p>
 
-        {/* 进入按钮 */}
         <button
           onClick={handleEnter}
-          className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-zinc-500/40 hover:bg-zinc-500/10 transition-all duration-500 animate-fade-in-up opacity-0 animate-delay-500 cursor-pointer backdrop-blur-sm"
-          style={{ animationFillMode: 'forwards' }}
+          className="group relative inline-flex items-center gap-3 px-10 py-4 cursor-pointer"
+          style={{
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(8px)',
+            transition: 'opacity 0.7s ease, transform 0.7s ease',
+            transitionDelay: '700ms',
+          }}
         >
-          <span className="text-base font-medium tracking-widest">进入</span>
-
+          <span
+            className="text-sm tracking-[0.3em] uppercase text-zinc-600 group-hover:text-zinc-300 transition-colors duration-500"
+            style={{ fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}
+          >
+            Enter
+          </span>
+          <span className="h-px w-8 bg-zinc-700 group-hover:bg-zinc-400 group-hover:w-12 transition-all duration-500" />
         </button>
-
-
       </div>
+
+      <div
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 h-px transition-all duration-1000 delay-1000"
+        style={{
+          width: '40px',
+          background: 'linear-gradient(90deg, transparent, rgba(180,160,140,0.3), transparent)',
+          opacity: loaded ? 1 : 0,
+        }}
+      />
     </section>
   )
 }

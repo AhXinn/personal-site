@@ -1,3 +1,179 @@
+
+/* ===== 19世纪手工版画纸 ===== */
+.antique-paper {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  /* 柔和米黄色旧纸底色 */
+  background-color: #efe6d5;
+  background-image:
+    /* 细微纸张纤维颗粒 — 高频小振幅噪点 */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2 0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    /* 棉麻布纹 — 横向低频条纹 */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.003 0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E"),
+    /* 天然泛黄斑点 — 极低频大范围色差 */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  background-size: 256px 256px, 200px 200px, 400px 400px;
+  background-blend-mode: multiply, multiply, multiply;
+  /* 哑光 — 不透明度控制整体纹理强度 */
+  opacity: 0.45;
+}
+/* 边缘做旧 */
+.antique-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(180,155,120,0.15) 80%, rgba(160,130,90,0.22) 100%);
+}
+/* 极淡冷暖色调变化 */
+.antique-paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(175deg, rgba(210,190,160,0.06) 0%, transparent 40%, rgba(190,170,145,0.05) 100%);
+}
+
+
+/* 90% Parchment + 5% Film Grain + 3% Paper Fibers + 2% Baroque Emboss */
+.parchment-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  /* 90% 象牙白基底 */
+  background-color: #f4efe4;
+  /* 3% 纸张纤维 - 长纤维噪点 */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.12' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fiber)' opacity='0.35'/%3E%3C/svg%3E"),
+    /* 5% 胶片颗粒 */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.5'/%3E%3C/svg%3E"),
+    /* 2% 巴洛克压花 - 菱形碎花纹 */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23c4b498' stroke-width='0.3' opacity='0.25'%3E%3Cpath d='M60 0 C80 20 100 40 100 60 C100 80 80 100 60 100 C40 100 20 80 20 60 C20 40 40 20 60 0z'/%3E%3Cpath d='M60 15 C72 28 85 42 85 60 C85 78 72 92 60 92 C48 92 35 78 35 60 C35 42 48 28 60 15z'/%3E%3Ccircle cx='60' cy='15' r='2' fill='%23c4b498' opacity='0.4'/%3E%3Ccircle cx='85' cy='60' r='2' fill='%23c4b498' opacity='0.4'/%3E%3Ccircle cx='60' cy='92' r='2' fill='%23c4b498' opacity='0.4'/%3E%3Ccircle cx='35' cy='60' r='2' fill='%23c4b498' opacity='0.4'/%3E%3Ccircle cx='60' cy='55' r='1.5' fill='%23c4b498' opacity='0.3'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 400px 400px, 180px 180px, 120px 120px;
+  background-blend-mode: multiply, multiply, multiply;
+}
+/* 边缘做旧暗角 */
+.parchment-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(180,160,130,0.12) 85%, rgba(160,140,110,0.2) 100%);
+}
+
+/* ===== 做旧纸张质感 ===== */
+.paper-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.paper-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #e8e0d5;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain2)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 300px 300px, 150px 150px;
+  background-blend-mode: multiply;
+  opacity: 0.5;
+}
+.paper-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(139,119,90,0.15) 100%);
+  opacity: 0.6;
+}
+
+/* 页面内容置于纸上 */
+.paper-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* ===== 胶片颗粒 ===== */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: grain-shift 0.5s steps(3) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-1px, -1px); }
+  66% { transform: translate(1px, 0); }
+}
+
+/* ===== 暗角 ===== */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.7) 100%);
+}
+
+/* ===== 巴洛克蕾丝纹理（底层装饰） ===== */
+.baroque-lace {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+}
+.baroque-lace-tl {
+  top: -5%;
+  left: -5%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(ellipse at top left, rgba(200,180,160,0.4) 0%, transparent 70%);
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 0C80 20 40 40 20 80c-20 40-10 80 20 100 30 20 70 10 90-20 20-30 30-70 10-100C120 20 110 0 100 0zM80 30c10 20 10 40-5 55-15 15-35 10-45-5s-5-35 10-45 25-15 40-5z' fill='white'/%3E%3Ccircle cx='30' cy='40' r='8' fill='white'/%3E%3Ccircle cx='160' cy='30' r='6' fill='white'/%3E%3Ccircle cx='150' cy='150' r='10' fill='white'/%3E%3Ccircle cx='180' cy='100' r='4' fill='white'/%3E%3C/svg%3E");
+  mask-size: 600px;
+  mask-repeat: no-repeat;
+  mask-position: top left;
+}
+.baroque-lace-br {
+  bottom: -5%;
+  right: -5%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(ellipse at bottom right, rgba(180,160,140,0.35) 0%, transparent 70%);
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 180c30-15 60-10 80 10 20 20 10 50-10 65-20 15-50 5-60-20-10-25-20-40-10-55zM150 160c20 10 40 30 30 50-10 20-40 25-55 10-15-15-5-40 15-50 5-3 8-7 10-10z' fill='white'/%3E%3Ccircle cx='40' cy='170' r='7' fill='white'/%3E%3Ccircle cx='170' cy='180' r='9' fill='white'/%3E%3Ccircle cx='130' cy='140' r='5' fill='white'/%3E%3C/svg%3E");
+  mask-size: 500px;
+  mask-repeat: no-repeat;
+  mask-position: bottom right;
+}
+.baroque-lace-tr {
+  top: 10%;
+  right: 0;
+  width: 25vw;
+  height: 35vw;
+  opacity: 0.15;
+  background: radial-gradient(ellipse at top right, rgba(190,170,150,0.3) 0%, transparent 70%);
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10c30 10 50 40 40 70-10 30-40 40-60 20S-10 30 10 10zM100 5c20 15 30 45 15 65-15 20-50 15-55-10s10-45 25-50c5-2 10-3 15-5z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ===== 鼠标视差容器 ===== */
+.parallax-container {
+  will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ===== 滚动淡入 ===== */
+.scroll-reveal {
+  opacity: 0;
+  transition: opacity 1.2s ease-out;
+}
+.scroll-reveal.visible {
+  opacity: 1;
+}
 /* Soul Seashell 字体 */
 @font-face {
   font-family: 'Soul Seashell';
