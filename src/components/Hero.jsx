@@ -45,7 +45,7 @@ export default function Hero({ onEnter }) {
       <div className="film-grain" />
       {imgs.map((img, i) => (
         <div key={i} className="absolute pointer-events-none z-5 animate-float" style={{ top: img.top, left: img.left, opacity: loaded ? img.opacity : 0, transform: 'rotate(' + img.rotate + 'deg)', transition: 'opacity 1s ease ' + (img.delay + 0.5) + 's' }}>
-          <img src={img.src} alt="" style={{ width: img.size, height: 'auto', filter: 'grayscale(0.5) sepia(0.25) brightness(1.05) contrast(1.15)' }} />
+          <img src={img.src} alt="" style={{ width: img.size, height: 'auto', filter: 'grayscale(0.5) sepia(0.25) brightness(0.9)' }} />
         </div>
       ))}
       <div className="absolute w-[600px] h-[600px] rounded-full pointer-events-none parallax-glow" style={{ background: 'radial-gradient(circle, rgba(160,130,90,0.08) 0%, transparent 70%)', left: '50%', top: '45%' }} />
@@ -58,10 +58,7 @@ export default function Hero({ onEnter }) {
           </button>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 z-0 pointer-events-none" style={{ height: '45%' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(212,192,152,0.4) 0%, rgba(212,192,152,0.15) 60%, transparent 100%)', zIndex: 1 }} />
-        <img src="/personal-site/retouch.png" alt="" className="w-full h-full object-cover object-top opacity-65 wave-animate" style={{ filter: 'grayscale(0.5) sepia(0.25) brightness(1.05) contrast(1.15)' }} />
-      </div>
+
     </section>
   )
 }
