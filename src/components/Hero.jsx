@@ -147,7 +147,7 @@ export default function Hero({ onEnter }) {
 
         {/* 名字 */}
         <h1
-          className="text-6xl sm:text-7xl md:text-9xl tracking-tight mb-8 text-white animate-fade-in-up opacity-0 animate-delay-100" style={{ fontFamily: 'Segoe Script', fontWeight: 400 }}
+          className="text-6xl sm:text-7xl md:text-9xl tracking-tight mb-8 text-white animate-fade-in-up opacity-0 animate-delay-100" style={{ fontFamily: 'Soul Seashell', fontWeight: 400 }}
           style={{ animationFillMode: 'forwards' }}
         >
           AhXinn
