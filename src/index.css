@@ -1,4 +1,28 @@
 
+/* ===== 持续脉动光晕 ===== */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ===== 视差光晕（CSS 变量驱动，无重渲染） ===== */
+.parallax-glow {
+  transform: translate(-50%, -50%) translate(calc(var(--mx, 0) * 0.3px), calc(var(--my, 0) * 0.3px));
+  will-change: transform;
+}
+
+/* ===== 浮动动画 ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(var(--tw-rotate, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--tw-rotate, 0deg)); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
 /* ===== 19世纪手工版画纸 ===== */
 .antique-paper {
   position: fixed;

@@ -2,7 +2,7 @@ export default function Contact() {
   return (
     <div className="text-center">
       <h2 className="text-3xl md:text-5xl font-bold mb-4 text-text-primary">
-        联系
+        联系我
       </h2>
       <p className="text-text-muted mb-12">
         在抖音上找到我

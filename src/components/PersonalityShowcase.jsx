@@ -91,6 +91,23 @@ export default function PersonalityShowcase({ onBack }) {
       {/* 烟雾背景 */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
 
+      {/* 右上角天使 */}
+      <div className="absolute top-6 right-6 z-10 pointer-events-none">
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full animate-pulse-glow"
+            style={{
+              background: 'radial-gradient(circle, rgba(255,255,240,0.25) 0%, rgba(255,250,220,0.08) 50%, transparent 70%)',
+              width: 180, height: 180,
+              top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+          <img src="/personal-site/angel.png" alt="" 
+            style={{ width: 120, height: 'auto', filter: 'grayscale(0.2) sepia(0.15) brightness(0.95)' }}
+          />
+        </div>
+      </div>
+
       {/* 光晕 */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-white/[0.02] blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-zinc-800/8 via-zinc-700/3 to-transparent pointer-events-none" />
